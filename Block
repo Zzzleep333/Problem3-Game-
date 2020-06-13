@@ -45,9 +45,9 @@ import java.awt.*;
 
     public void setImg(boolean can_destroyed) {
         if(!can_destroyed){
-        Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"0.png");
+        Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b0.png");
         } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"0.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+"db0.png");
             //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
         }
     }
@@ -136,3 +136,4 @@ import java.awt.*;
     public int getWidth(){return Block.getIconWidth();}
     public int getHeight(){return Block.getIconHeight();}
 }
+
