@@ -1,0 +1,14 @@
+package Models;
+
+public class Universe {
+    public final static int SPEED_OF_UNIVERSE = 2;
+    private static int Universe_coordinate = 0;//Это самая начальная точка 0,0
+
+    public Universe(){}
+    public void MoveUniverse(){
+        Universe_coordinate-=SPEED_OF_UNIVERSE;
+    }
+    public int getUniverse_coordinate(){
+        return Universe_coordinate;
+    }
+}
