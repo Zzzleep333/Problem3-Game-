@@ -1,0 +1,62 @@
+package Models;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class My_background extends JComponent {
+    public final String BACKGROUND_PATH = "Backgrounds\\";
+    static String level ="1";
+    final static int Y_coordinate = 0;
+    private int X_coordinate;
+    ImageIcon background;
+    private static int current_backgrounds = 0;
+    boolean Visible = true;
+
+    @Override
+    public int getX() {
+        return X_coordinate;
+    }
+
+    @Override
+    public int getY() {
+        return Y_coordinate;
+    }
+
+    public My_background(int X){
+        CreateBackground(X);
+    }
+    public Image getImg() {
+        return background.getImage();
+    }
+    public void setImg() {
+        background = new ImageIcon(BACKGROUND_PATH+level+"\\"+Character.toString('1'+current_backgrounds)+".png");
+        nextBackground();
+    }
+    public int getX_coordinate() {
+        return X_coordinate;
+    }
+    public void moveBackground(int X) {
+        if(X_coordinate>=-1000){
+        X_coordinate += X;
+        } else{
+            setVisible(false);
+        }
+    }
+    public boolean isVisible() {
+        return Visible;
+    }
+    public void setVisible(boolean Visible) {
+        this.Visible = Visible;
+    }
+    public void CreateBackground(int X){
+       setVisible(true);
+       X_coordinate = X;
+       setImg();
+    }
+    public void setLevel(String level){
+        this.level = level;
+    }
+    void nextBackground(){
+        current_backgrounds=(current_backgrounds+1)%2;
+    }
+}
