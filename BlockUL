@@ -9,9 +9,9 @@ public class BlockUL extends Block {
 
     public void setImg(boolean can_destroyed) {
         if(!can_destroyed){
-            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"3.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b3.png");
         } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"3.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+"db3.png");
             //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
         }
     }
