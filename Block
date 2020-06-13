@@ -1,0 +1,138 @@
+package Models;
+
+import javax.swing.*;
+import java.awt.*;
+
+ public class Block extends JComponent  {
+     static String level = "1";
+    protected ImageIcon Block;
+    protected int live;
+    protected int X_coordinate;
+    protected int Y_coordinate;
+    protected boolean Visible = true;
+    protected final static String Path_to_blocks = "Bloks";
+
+    public Block(int X, int Y, boolean can_destroyed){
+        CreateBlocks(X,Y,can_destroyed);
+    }
+
+    public void CreateBlocks(int X,int Y, boolean can_destroyed){
+        setImg(can_destroyed);
+        if(can_destroyed){
+            live = 1;
+        }
+        else{
+            live = 9999;
+        }
+        X_coordinate = X;
+        Y_coordinate = Y;
+    }
+
+    public boolean getDamage() {
+        live--;
+        if(live == 0){
+            setVisible(false);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public Image getImg() {
+        return Block.getImage();
+    }
+
+    public void setImg(boolean can_destroyed) {
+        if(!can_destroyed){
+        Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"0.png");
+        } else{
+            Block = new ImageIcon(Path_to_blocks+"\\"+"0.png");
+            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
+        }
+    }
+
+    void setLevel(String level){
+        this.level = level;
+    }
+
+    public int getX_coordinate() {
+        return X_coordinate;
+    }
+
+    public int getY_coordinate() {
+        return Y_coordinate;
+    }
+
+    public void setX_coordinate(int X) {X_coordinate = X;}
+
+    public void setY_coordinate(int Y) {Y_coordinate = Y;}
+
+    public void moveBlock(int X, int Y) {
+        X_coordinate+=X;
+        Y_coordinate+=Y;
+    }
+
+    public boolean isVisible() {
+        return Visible;
+    }
+
+    public void setVisible(boolean Visible) {
+        this.Visible = Visible;
+    }
+    public boolean inHitBox(Plane player){
+        if(((player.getY_coordinate()+2)<=(Y_coordinate+getHeight()))&&((player.getY_coordinate()+player.getHeight()-2)>=(Y_coordinate))&&((player.getX_coordinate()+player.getWidth()-2)>=X_coordinate)&&(player.getX_coordinate()<=(X_coordinate+getWidth()))){//здесь определяется область, в которой игрок может столкнуться с блоком
+            for(int i =X_coordinate;(i<(player.getWidth()+player.getX_coordinate()))||(i<=(X_coordinate+getWidth()));i++){
+                if(((player.getY_coordinate()+2)<=(function_of_blockD(i)))&&((player.getY_coordinate()+2)>=(function_of_blockU(i)))){
+//                    System.out.println("(player.getY_coordinate()+2)  "+(player.getY_coordinate()+2)+ "    верхняя часть самолёта");
+//                    System.out.println("(function_of_blockD("+i+"))   "+(function_of_blockD(i))+ "     нижняя часть блока") ;
+//                    System.out.println("(player.getY_coordinate()+2)   "+(player.getY_coordinate()+2)+"    верхняя часть самолёта");
+//                    System.out.println("(function_of_blockU("+i+"))  " +(function_of_blockU(i))+"  верхняя часть блока");
+                    return  true;
+                }
+                if(((player.getY_coordinate()+player.getHeight()-2)>=function_of_blockU(i))&&((player.getY_coordinate()+player.getHeight()-2)<=function_of_blockD(i))){
+//                    System.out.println("(player.getY_coordinate()+player.getHeight()-2)   "+ (player.getY_coordinate()+player.getHeight()-2)+"   нижняя граница самолёта");
+//                    System.out.println("function_of_blockU("+i+")   "+function_of_blockU(i)+"   верхняя граница блока");
+//                    System.out.println("(player.getY_coordinate()+player.getHeight()-2)   "+(player.getY_coordinate()+player.getHeight()-2)+"   нижняя граница самолёта");
+//                    System.out.println("function_of_blockD("+i+")   "+function_of_blockD(i)+"   нижняя граница блока");
+                    return  true;
+                }
+            }
+        }
+        return false;
+    }
+    int function_of_blockU(int X){//определяет верхнюю границу блока
+        if((X<=(X_coordinate+getWidth()))&&(X>=X_coordinate)){
+        return Y_coordinate;
+        } else{
+            return 10000;
+        }
+    }
+
+     int function_of_blockD(int X){//определяет нижнюю границу блока
+
+         if((X<=(X_coordinate+getWidth()))&&(X>=X_coordinate)){
+             return Y_coordinate+getHeight();
+         } else{
+             return -10000;
+         }
+     }
+     public boolean inHitBox(Bullet bullet){
+         if((bullet.getX_coordinate()>=X_coordinate)&&(bullet.getX_coordinate()<=(X_coordinate+getWidth()))&&(bullet.getY_coordinate()<=function_of_blockD(bullet.getX_coordinate()))&&(bullet.getY_coordinate()>=function_of_blockU(bullet.getX_coordinate()))){
+             return true;
+         } else{
+//             System.out.println("bullet.getX_coordinate()    "+bullet.getX_coordinate()+"     X пули");
+//             System.out.println("X_coordinate    "+X_coordinate+"    левая стенка ящика");
+//             System.out.println("(X_coordinate+getWidth())    "+(X_coordinate+getWidth())+"      правая стенка ящика");
+//             System.out.println("bullet.getY_coordinate()     "+bullet.getY_coordinate()+"      Y пули");
+//             System.out.println("function_of_blockD(bullet.getX_coordinate())     "+function_of_blockD(bullet.getX_coordinate())+"       низ блока");
+//             System.out.println("function_of_blockU(bullet.getX_coordinate())      "+ function_of_blockU(bullet.getX_coordinate())+"     верх блока");
+             return false;
+         }
+     }
+    public String type_of_block(){
+        return "B";
+    }
+    public int getWidth(){return Block.getIconWidth();}
+    public int getHeight(){return Block.getIconHeight();}
+}
