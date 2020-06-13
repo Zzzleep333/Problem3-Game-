@@ -10,9 +10,9 @@ public class BlockUR extends Block {
 
     public void setImg(boolean can_destroyed) {
         if(!can_destroyed){
-            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"4.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b4.png");
         } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"4.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+"db4.png");
             //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
         }
     }
