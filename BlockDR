@@ -9,9 +9,9 @@ public class BlockDR extends Block {
 
     public void setImg(boolean can_destroyed) {
         if(!can_destroyed){
-            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"2.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b2.png");
         } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"2.png");
+            Block = new ImageIcon(Path_to_blocks+"\\"+"db2.png");
             //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
         }
     }
