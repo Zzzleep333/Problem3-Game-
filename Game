@@ -1,0 +1,15 @@
+package com.company;
+
+
+import Models.*;
+
+import java.util.ArrayList;
+
+public class Game {
+
+    public static void main(String[] args) {
+        Controller.startGame(Games_panel.getBackgrounds(),Games_panel.getBlocks());
+        //System.out.println( Controller.getBlocks().get(0).getClass().toString());
+        Drawer.getPicture();
+    }
+}
