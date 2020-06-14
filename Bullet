@@ -1,7 +1,5 @@
 package Models;
 
-import javax.swing.*;
-import java.awt.*;
 
 
 public class Bullet extends Model{
@@ -37,7 +35,5 @@ public class Bullet extends Model{
         this.Visible = Visible;
     }
 
-//    //public Image getImg() {
-////        return img.getImage();
-////    }
 }
+
