@@ -2,7 +2,6 @@ package Controller;
 
 import Models.*;
 
-import java.util.ArrayList;
 
 public class Controller {
     static private Universe universe = new Universe();
@@ -50,5 +49,4 @@ public class Controller {
 //        level = "" + Character.toString(level.charAt(0) + 1);
 //    }
 }
-
 
