@@ -3,44 +3,30 @@ package Models;
 import javax.swing.*;
 import java.awt.*;
 
-public class My_background extends JComponent {
+public class My_background extends Model {
     public final String BACKGROUND_PATH = "Backgrounds\\";
     static String level ="1";
-    final static int Y_coordinate = 0;
-    private int X_coordinate;
-    ImageIcon background;
     private static int current_backgrounds = 0;
     boolean Visible = true;
 
-    @Override
-    public int getX() {
-        return X_coordinate;
-    }
-
-    @Override
-    public int getY() {
-        return Y_coordinate;
-    }
 
     public My_background(int X){
         CreateBackground(X);
     }
-    public Image getImg() {
-        return background.getImage();
-    }
     public void setImg() {
-        background = new ImageIcon(BACKGROUND_PATH+level+"\\"+Character.toString('1'+current_backgrounds)+".png");
+        img = new ImageIcon(BACKGROUND_PATH+level+"\\"+Character.toString('1'+current_backgrounds)+".png");
         nextBackground();
     }
-    public int getX_coordinate() {
-        return X_coordinate;
-    }
     public void moveBackground(int X) {
-        if(X_coordinate>=-1000){
-        X_coordinate += X;
+        if(this.X>=-1000){
+        this.X += X;
         } else{
             setVisible(false);
         }
+    }
+    public void move(){
+        moveBackground(-Universe.SPEED_OF_UNIVERSE);
+        getSignal();
     }
     public boolean isVisible() {
         return Visible;
@@ -50,8 +36,9 @@ public class My_background extends JComponent {
     }
     public void CreateBackground(int X){
        setVisible(true);
-       X_coordinate = X;
+       this.X = X;
        setImg();
+        getSignal();
     }
     public void setLevel(String level){
         this.level = level;
