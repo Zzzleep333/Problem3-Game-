@@ -1,5 +1,6 @@
 package View;
 
+import Controller.Controller;
 import Models.*;
 
 import javax.swing.*;
@@ -7,19 +8,63 @@ import java.awt.*;
 import java.util.ArrayList;
 
 class Games_panel extends JPanel {
-
+        final static ImageIcon Block = new ImageIcon("Bloks\\1\\b0.png");
+        final static ImageIcon DBlock=new ImageIcon("Bloks\\db0.png");
+        final static ImageIcon BlockDL = new ImageIcon("Bloks\\1\\b1.png");
+        final static ImageIcon DBlockDL=new ImageIcon("Bloks\\db1.png");
+        final static ImageIcon BlockDR = new ImageIcon("Bloks\\1\\b2.png");
+        final static ImageIcon DBlockDR=new ImageIcon("Bloks\\db2.png");
+        final static ImageIcon BlockUL = new ImageIcon("Bloks\\1\\b3.png");
+        final static ImageIcon DBlockUL=new ImageIcon("Bloks\\db3.png");
+        final static ImageIcon BlockUR = new ImageIcon("Bloks\\1\\b4.png");
+        final static ImageIcon DBlockUR=new ImageIcon("Bloks\\db4.png");
+        //final static ImageIcon Plane = new ImageIcon("");
+        final static ImageIcon bulletimg = new ImageIcon("Bullet\\Пуля.png");
+        final static ImageIcon background1 = new ImageIcon("Backgrounds\\1\\1.png");
+        final static ImageIcon background2 = new ImageIcon("Backgrounds\\1\\2.png");
+        private final static String PATH_TO_ANIMATION = "C:\\Users\\Alex\\IdeaProjects\\Game\\Plane\\";
+        final static ArrayList<ImageIcon> anim_to_plane = new ArrayList<ImageIcon>();
+        public void CreateAnim(){
+            for(char i = '1'; i < '7';i++){
+            anim_to_plane.add(new ImageIcon(PATH_TO_ANIMATION + "p"+Character.toString(i) + ".png"));
+        }
+        }
         public void paint(Graphics g){
-            for(Model model:Universe.getModels()){//Это надо брать со вселенной и контролера
-                if(model.isVisible()){
+                //System.out.println("//////////");
 
-                g.drawImage(model.getImg(),model.getX(),model.getY(), null);}
+            for(My_background background:Universe.getBackgrounds()){
+                    if(background.isVisible()){
+                    if(background.getNumber_background() == 0){
+                            g.drawImage(background1.getImage(),background.getX(),background.getY(),null);
+                    } else{
+                            g.drawImage(background2.getImage(),background.getX(),background.getY(),null);
+                    }
+                    }
             }
-            for(Block block: Universe.getBlocks()){
-                if(block.isVisible()){
-                g.drawImage(block.getImg(),block.getX(),block.getY(),null);
+            for (Bullet bullet:Universe.getBullets()){
+                    if(bullet.isVisible()){
+                    g.drawImage(bulletimg.getImage(),bullet.getX(),bullet.getY(),null);
+                    }
+            }
+                Controller.getPlayer().nextImg();
+                g.drawImage(anim_to_plane.get(Controller.getPlayer().getCurrent_plane()).getImage(),Controller.getPlayer().getX(),Controller.getPlayer().getY(),Controller.getPlayer().getWidth(),Controller.getPlayer().getHeight(),null);
+                //System.out.println("Plane:"+ anim_to_plane.get(Controller.getPlayer().getCurrent_plane()).toString()+"   "+Controller.getPlayer().getX()+"    "+ Controller.getPlayer().getY()+"    "+Controller.getPlayer().getHeight()+"   "+Controller.getPlayer().getWidth());
+                for(Block block:Universe.getBlocks()){
+                        if(block.isVisible()){
+                                switch (block.type_of_block()){
+                                        case("B"): g.drawImage(Block.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DL"): g.drawImage(BlockDL.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DR"): g.drawImage(BlockDR.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("UL"): g.drawImage(BlockUL.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("UR"): g.drawImage(BlockUR.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DB"): g.drawImage(DBlock.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DDL"): g.drawImage(DBlockDL.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DDR"): g.drawImage(DBlockDR.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DUL"): g.drawImage(DBlockUL.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                        case("DUR"): g.drawImage(DBlockUR.getImage(),block.getX(),block.getY(),block.getWidth(),block.getHeight(),null); break;
+                                }
+                        }
                 }
-            }
-
         }
-        }
+}
 
