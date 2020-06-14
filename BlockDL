@@ -9,15 +9,14 @@ public class BlockDL extends Block {
 
     public void setImg(boolean can_destroyed) {
         if(!can_destroyed){
-            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b1.png");
+            img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b1.png");
         } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"db1.png");
-            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
+            img = new ImageIcon(Path_to_blocks+"\\"+"db1.png");
         }
     }
     int function_of_blockU(int X){//определяет верхнюю границу блока
-        if((X<=(X_coordinate+getWidth()))&&(X>X_coordinate)){
-            return Y_coordinate+(X-X_coordinate);
+        if((X<=(this.X+getWidth()))&&(X>this.X)){
+            return this.Y+(X-this.X);
         } else{
             return 10000;
         }
