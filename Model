@@ -1,0 +1,47 @@
+package Models;
+
+import View.View;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class Model {
+    protected final ArrayList<View> viewers = new ArrayList<View>();
+    ImageIcon img;
+    protected int X;
+    protected int Y;
+    public void subscribe(View v){
+        if(!viewers.contains(v)){
+            v.plusGO();
+        viewers.add(v);}
+    }
+    public void NotifyAll(){
+        for(View v:viewers){
+            v.minusGO();
+            viewers.remove(v);
+        }
+    }
+    protected void getSignal(){
+        for(View view:viewers){
+            view.update();
+        }
+    }
+
+    public int getY() {
+        return Y;
+    }
+
+    public int getX() {
+        return X;
+    }
+
+    public Image getImg() {
+        return img.getImage();
+    }
+    public boolean isVisible(){return false;}
+    public void move(){};//Здесь должен поступать сигнал вьюверу
+
+}
