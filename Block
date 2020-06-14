@@ -1,12 +1,7 @@
 package Models;
 
-
-import javax.swing.*;
-import java.awt.*;
-
 public class Block extends Model {
      static String level = "1";
-    //protected ImageIcon img;
     protected int live;
     protected boolean Visible = true;
     protected final static String Path_to_blocks = "Bloks";
@@ -19,7 +14,6 @@ public class Block extends Model {
 
     public void CreateBlocks(int X,int Y, boolean can_destroyed){
         setVisible(true);
-        //setImg(can_destroyed);
         if(can_destroyed){
             live = 1;
         }
@@ -42,18 +36,6 @@ public class Block extends Model {
             return false;
         }
     }
-
-//    public void setImg(boolean can_destroyed) {
-//        if(!can_destroyed){
-//        img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b0.png");
-//        } else{
-//            img = new ImageIcon(Path_to_blocks+"\\"+"db0.png");
-//            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
-//        }
-//    }
-//    public Image getImg(){
-//        return img.getImage();
-//    }
     void setLevel(String level){
         this.level = level;
     }
