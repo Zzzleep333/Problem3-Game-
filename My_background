@@ -1,21 +1,14 @@
 package Models;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class My_background extends Model {
-    public final String BACKGROUND_PATH = "Backgrounds\\";
+
     static String level ="1";
     private static int current_backgrounds = 0;
     boolean Visible = true;
-
+    int number_background;
 
     public My_background(int X){
         CreateBackground(X);
-    }
-    public void setImg() {
-        img = new ImageIcon(BACKGROUND_PATH+level+"\\"+Character.toString('1'+current_backgrounds)+".png");
-        nextBackground();
     }
     public void moveBackground(int X) {
         if(this.X>=-1000){
@@ -37,7 +30,8 @@ public class My_background extends Model {
     public void CreateBackground(int X){
        setVisible(true);
        this.X = X;
-       setImg();
+       number_background = current_backgrounds;
+       nextBackground();
         getSignal();
     }
     public void setLevel(String level){
@@ -46,4 +40,8 @@ public class My_background extends Model {
     void nextBackground(){
         current_backgrounds=(current_backgrounds+1)%2;
     }
+    public int getNumber_background(){
+        return number_background;
+    }
 }
+
