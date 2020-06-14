@@ -1,0 +1,25 @@
+package View;
+
+import Models.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+class Games_panel extends JPanel {
+
+        public void paint(Graphics g){
+            for(Model model:Universe.getModels()){//Это надо брать со вселенной и контролера
+                if(model.isVisible()){
+
+                g.drawImage(model.getImg(),model.getX(),model.getY(), null);}
+            }
+            for(Block block: Universe.getBlocks()){
+                if(block.isVisible()){
+                g.drawImage(block.getImg(),block.getX(),block.getY(),null);
+                }
+            }
+
+        }
+        }
+
