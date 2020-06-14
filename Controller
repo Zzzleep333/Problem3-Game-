@@ -41,9 +41,14 @@ public class Controller {
     public static Plane getPlayer(){
         return  player;
     }
+
+    public static boolean isDuring_game() {
+        return during_game;
+    }
 //
 //    public void setNextLevel() {
 //        level = "" + Character.toString(level.charAt(0) + 1);
 //    }
 }
+
 
