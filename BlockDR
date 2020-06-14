@@ -9,15 +9,15 @@ public class BlockDR extends Block {
 
     public void setImg(boolean can_destroyed) {
         if(!can_destroyed){
-            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b2.png");
+            img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b2.png");
         } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"db2.png");
+            img = new ImageIcon(Path_to_blocks+"\\"+"db2.png");
             //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
         }
     }
     int function_of_blockU(int X){//определяет верхнюю границу блока
-        if((X<=(X_coordinate+getWidth()))&&(X>X_coordinate)){
-            return Y_coordinate+getHeight()-(X-X_coordinate);
+        if((X<=(this.X+getWidth()))&&(X>this.X)){
+            return this.Y+getHeight()-(X-this.X);
         } else{
             return 10000;
         }
@@ -27,3 +27,4 @@ public class BlockDR extends Block {
         return "DR";
     }
 }
+
