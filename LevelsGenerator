@@ -1,0 +1,75 @@
+package Models;
+
+import Models.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class LevelsGenerator{
+    static private final String PATH_TO_LEVELS = "levels.txt";
+    static Scanner input;
+    static boolean can_destroyed_next_block = false;
+    static int nextX;
+    static int nextY;
+    static String next_type_of_block;
+    static public void setLevel(){
+        File file = new File(PATH_TO_LEVELS);
+        //FileInputStream in = new FileInputStream(file);
+        try{
+        input = new Scanner(file);
+        }
+        catch(IOException b){
+            System.out.println(b.getMessage());
+        }
+    };
+    static boolean ParseNextLine(){
+        String[] Str = input.nextLine().split(" ");
+        ArrayList<String> stats = new ArrayList<String>();
+        for(int i = 0;i<Str.length;i++){
+            stats.add(Str[i]);
+        }
+        if(stats.get(0)=="END"){
+           return true;
+        }else {
+            nextX = Integer.parseInt(stats.get(0));
+            nextY = Integer.parseInt(stats.get(1));
+            String type_of_block;
+            if (stats.get(2).equals("DB")||stats.get(2).length()>2) {
+                type_of_block = stats.get(2).substring(1);
+                can_destroyed_next_block = true;
+            } else {
+                can_destroyed_next_block =false;
+                type_of_block = stats.get(2);
+            }
+            next_type_of_block = type_of_block;
+            return false;
+        }
+    }
+    static int getNextX(){
+        return nextX;
+    }
+    static int getNextY(){
+        return nextY;
+    }
+    static public String getNext_type_of_block() {
+        return next_type_of_block;
+    }
+    static public void CreateBlock(Block block){
+       block.CreateBlocks(getNextX(),getNextY(),can_destroyed_next_block);
+    }
+    static public Block CreateBlock(){
+        switch (next_type_of_block){
+            case("B"): return new Block(getNextX(),getNextY(),can_destroyed_next_block);
+            case("DL"): return new BlockDL(getNextX(),getNextY(),can_destroyed_next_block);
+            case("DR"): return new BlockDR(getNextX(),getNextY(),can_destroyed_next_block);
+            case("UL"): return new BlockUL(getNextX(),getNextY(),can_destroyed_next_block);
+            case("UR"): return new BlockUR(getNextX(),getNextY(),can_destroyed_next_block);
+            default: return null;
+        }
+    }
+    static public void close(){
+        input.close();
+    }
+}
