@@ -13,7 +13,8 @@ public class View extends JFrame {
         super(s);
     }
     public void update(){
-    this.repaint();
+        if(Controller.isDuring_game()){
+        this.repaint();}
     }
     public static void endGame(){
         Controller.stopGame();
