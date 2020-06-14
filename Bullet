@@ -5,7 +5,6 @@ import java.awt.*;
 
 
 public class Bullet extends Model{
-    ImageIcon img = new ImageIcon("Bullet\\Пуля.png");
     public static final int SPEED_OF_BULLET = 25;
     private int live = 1;
     private boolean Visible;
@@ -38,9 +37,7 @@ public class Bullet extends Model{
         this.Visible = Visible;
     }
 
-    @Override
-    public Image getImg() {
-        return img.getImage();
-    }
+//    //public Image getImg() {
+////        return img.getImage();
+////    }
 }
-
