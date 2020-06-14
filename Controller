@@ -1,272 +1,49 @@
-package com.company;
+package Controller;
 
 import Models.*;
 
-import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Controller {
     static private Universe universe = new Universe();
-    //static private Plane player = new Plane();
+    static private Plane player = new Plane();
     static public boolean during_game = false;
-    static private int free_bullet = 0;
-    static private int free_background = 0;
-    static private int free_blocks = 0;
-    static private int free_blocksDL = 0;
-    static private int free_blocksDR = 0;
-    static private int free_blocksUL = 0;
-    static private int free_blocksUR = 0;
-    //static private final ArrayList<Block> blocks = new ArrayList<Block>();
-    //static private final ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-    //static private final ArrayList<My_background> backgrounds = new ArrayList<My_background>();
     static String level = "1";
 
-    static void startGame(ArrayList<My_background> backgrounds, ArrayList<Block> blocks) {
+    public static void startGame() {
         during_game = true;
-        LevelsGenerator.setLevel();
-        LevelsGenerator.ParseNextLine();
-       addBlock(blocks);
-        backgrounds.add(new My_background(0));
-        backgrounds.add(new My_background(1000));
+       Universe.GenerateUniverse();
     }
 
-    static void stopGame() {
-        during_game = false;
+    public static void stopGame() {
+        during_game =false;
+        player.NotifyAll();
         //blocks.clear();
        // bullets.clear();
         //backgrounds.clear();
         //LevelsGenerator.close();
     }
 
-    static void movePlane(String direction, Plane player) {//Строки наподобии "lu"(значит влево вверх)
+    public static void movePlane(String direction) {//Строки наподобии "lu"(значит влево вверх)
         for (int i = 0; i < direction.length(); i++) {
             player.movePlane(direction.charAt(i));
         }
     }
-    static Bullet SpaceBullet(ArrayList<Bullet> bullets){
-        for(Bullet bullet:bullets){
-            if(!bullet.isVisible()){
-                free_bullet--;
-                return bullet;
-            }
-        }
-        return null;
-    }
-    static My_background SpaceBackground(ArrayList<My_background> backgrounds){
-        for(My_background background:backgrounds){
-            if(!background.isVisible()){
-                free_background--;
-                return background;
-            }
-        }
-        return null;
-    }
-    static Block SpaceBlock(String type_of_block, ArrayList<Block> blocks){
-        for(Block block:blocks){
-            if(block.isVisible()&&block.type_of_block().equals(type_of_block)){
-                switch (block.type_of_block()){
-                    case (""):free_blocks--; break;
-                    case ("DL"):free_blocksDL--; break;
-                    case ("DR"):free_blocksDR--; break;
-                    case ("UL"):free_blocksUL--; break;
-                    case ("UR"):free_blocksUR--;break;
-                }
-                return block;
-            }
-        }
-        return null;
-    }
-    static void Shoot(Plane player, ArrayList<Bullet> bullets) {
-        if(free_bullet == 0){
-            bullets.add(new Bullet(player));
-        } else{
-            SpaceBullet(bullets).CreateBullet(player);
-        }
-    }
 
-    static void createNextBackground(ArrayList<My_background> backgrounds) {
-        if(free_background!=0){
-            SpaceBackground(backgrounds).CreateBackground(1000);
+    public static void Shoot() {//Оставить туть
+        if(Universe.getHave_free_bullet() == 0){
+            Universe.getBullets().add(new Bullet(player));
+            Universe.toModel();
         } else{
-            backgrounds.add(new My_background(1000));
+            Universe.SpaceBullet().CreateBullet(player);
         }
     }
-    static void addBlock(ArrayList<Block> blocks){
-        for(;LevelsGenerator.getNextX()+universe.getUniverse_coordinate()<=1200;){
-            if(LevelsGenerator.getNext_type_of_block()=="B"&&free_blocks!=0){
-                LevelsGenerator.CreateBlock(SpaceBlock("B", blocks));
-                return;
-            }
-            if(LevelsGenerator.getNext_type_of_block()=="DL"&&free_blocksDL!=0){
-                LevelsGenerator.CreateBlock(SpaceBlock("DL", blocks));
-                return;
-            }
-            if(LevelsGenerator.getNext_type_of_block()=="DR"&&free_blocksDR!=0){
-                LevelsGenerator.CreateBlock(SpaceBlock("DR", blocks));
-                return;
-            }
-            if(LevelsGenerator.getNext_type_of_block()=="UL"&&free_blocksUL!=0){
-                LevelsGenerator.CreateBlock(SpaceBlock("UL", blocks));
-                return;
-            }
-            if(LevelsGenerator.getNext_type_of_block()=="UR"&&free_blocksUR!=0){
-                LevelsGenerator.CreateBlock(SpaceBlock("UR", blocks));
-                return;
-            }
-            blocks.add(LevelsGenerator.CreateBlock());
-            if(LevelsGenerator.ParseNextLine()){
-                stopGame();
-                break;
-            }
-        }
+    public static Plane getPlayer(){
+        return  player;
     }
-
 //
 //    public void setNextLevel() {
 //        level = "" + Character.toString(level.charAt(0) + 1);
 //    }
-
-    static void CollidePlayer(ArrayList<Block> blocks, Plane player) {
-        for(Block block:blocks){
-            if(block.inHitBox(player)&&block.isVisible()&&player.isVisible()) {
-                if (player.getDamage()) {
-                    player.setVisible(false);
-                    stopGame();
-                    break;
-                }
-                if (block.getDamage()) {
-                    switch (block.type_of_block()){
-                        case("B"): free_blocks++;break;
-                        case("UL"): free_blocksUL++;break;
-                        case("UR"): free_blocksUR++;break;
-                        case("DL"): free_blocksDL++;break;
-                        case("DR"): free_blocksDR++;break;
-                    }
-                    block.setVisible(false);
-                }
-            }
-        }
-    }
-    static void CollideBullet(ArrayList<Bullet> bullets, ArrayList<Block> blocks){
-        for(Bullet bullet:bullets){
-            for(Block block:blocks){
-                if(bullet.isVisible()&&block.isVisible()&&block.inHitBox(bullet)){
-                    if(bullet.getDamage()){
-                        free_bullet++;
-                        bullet.setVisible(false);
-                    }
-                    if (block.getDamage()) {
-                        switch (block.type_of_block()){
-                            case("B"): free_blocks++;break;
-                            case("UL"): free_blocksUL++;break;
-                            case("UR"): free_blocksUR++;break;
-                            case("DL"): free_blocksDL++;break;
-                            case("DR"): free_blocksDR++;break;
-                        }
-                        block.setVisible(false);
-                    }
-                }
-            }
-        }
-    }
-
-    static public void per_tic(ArrayList<Block> blocks, ArrayList<Bullet> bullets,ArrayList<My_background>backgrounds, Plane player){
-        if(during_game){
-        universe.MoveUniverse();
-        for(Block block:blocks){
-            if(block.isVisible()){
-            block.moveBlock(-Universe.SPEED_OF_UNIVERSE,0);
-            }
-        }
-        for(Bullet bullet: bullets){
-            if(bullet.isVisible()){
-            bullet.MoveBullet();}
-        }
-        for(My_background background:backgrounds){
-            if(background.isVisible()){
-            background.moveBackground(-Universe.SPEED_OF_UNIVERSE);}
-            if(background.getX_coordinate()<=-1000){
-                background.setVisible(false);
-                free_background++;
-                Controller.createNextBackground(backgrounds);
-            }
-        }
-        if((LevelsGenerator.nextX-universe.getUniverse_coordinate())>=1000){
-            addBlock(blocks);
-        }
-        CollideBullet(bullets,blocks);
-        CollidePlayer(blocks,player);}
-    }
 }
 
-class LevelsGenerator{
-    static private final String PATH_TO_LEVELS = "levels.txt";
-    static Scanner input;
-    static boolean can_destroyed_next_block = false;
-    static int nextX;
-    static int nextY;
-    static String next_type_of_block;
-    static public void setLevel(){
-        File file = new File(PATH_TO_LEVELS);
-        //FileInputStream in = new FileInputStream(file);
-        try{
-        input = new Scanner(file);
-        }
-        catch(IOException b){
-            System.out.println(b.getMessage());
-        }
-    };
-    static boolean ParseNextLine(){
-        String[] Str = input.nextLine().split(" ");
-        ArrayList<String> stats = new ArrayList<String>();
-        for(int i = 0;i<Str.length;i++){
-            stats.add(Str[i]);
-        }
-        if(stats.get(0)=="END"){
-           return true;
-        }else {
-            nextX = Integer.parseInt(stats.get(0));
-            nextY = Integer.parseInt(stats.get(1));
-            String type_of_block;
-            if (stats.get(2).equals("DB")||stats.get(2).length()>2) {
-                type_of_block = stats.get(2).substring(1);
-                can_destroyed_next_block = true;
-            } else {
-                can_destroyed_next_block =false;
-                type_of_block = stats.get(2);
-            }
-            next_type_of_block = type_of_block;
-            return false;
-        }
-    }
-    static int getNextX(){
-        return nextX;
-    }
-    static int getNextY(){
-        return nextY;
-    }
-    static public String getNext_type_of_block() {
-        return next_type_of_block;
-    }
-    static public void CreateBlock(Block block){
-       block.CreateBlocks(getNextX(),getNextY(),can_destroyed_next_block);
-    }
-    static public Block CreateBlock(){
-        switch (next_type_of_block){
-            case("B"): return new Block(getNextX(),getNextY(),can_destroyed_next_block);
-            case("DL"): return new BlockDL(getNextX(),getNextY(),can_destroyed_next_block);
-            case("DR"): return new BlockDR(getNextX(),getNextY(),can_destroyed_next_block);
-            case("UL"): return new BlockUL(getNextX(),getNextY(),can_destroyed_next_block);
-            case("UR"): return new BlockUR(getNextX(),getNextY(),can_destroyed_next_block);
-            default: return null;
-        }
-    }
-    static public void close(){
-        input.close();
-    }
-}
