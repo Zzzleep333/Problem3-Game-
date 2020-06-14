@@ -1,22 +1,10 @@
 package Models;
 
-import javax.swing.*;
-
 public class BlockUR extends Block {
 
     public BlockUR(int X, int Y, boolean can_destroyed) {
         super(X, Y, can_destroyed);
     }
-
-//    public void setImg(boolean can_destroyed) {
-//        if(!can_destroyed){
-//            img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b4.png");
-//        } else{
-//            img = new ImageIcon(Path_to_blocks+"\\"+"db4.png");
-//            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
-//        }
-//    }
-
 
     int function_of_blockD(int X){//определяет нижнюю границу блока
 
@@ -36,3 +24,4 @@ public class BlockUR extends Block {
         }
     }
 }
+
