@@ -26,6 +26,7 @@ public class Drawer extends View {
         game.setBounds(200,200,1000,480);
         game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Games_panel panel = new Games_panel();
+        panel.CreateAnim();
         game.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -74,5 +75,4 @@ public class Drawer extends View {
 
 
 }
-
 
