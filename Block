@@ -10,6 +10,8 @@ public class Block extends Model {
     protected int live;
     protected boolean Visible = true;
     protected final static String Path_to_blocks = "Bloks";
+    protected int Width = 30;
+    protected int Height = 30;
 
     public Block(int X, int Y, boolean can_destroyed){
         CreateBlocks(X,Y,can_destroyed);
@@ -17,7 +19,7 @@ public class Block extends Model {
 
     public void CreateBlocks(int X,int Y, boolean can_destroyed){
         setVisible(true);
-        setImg(can_destroyed);
+        //setImg(can_destroyed);
         if(can_destroyed){
             live = 1;
         }
@@ -41,17 +43,17 @@ public class Block extends Model {
         }
     }
 
-    public void setImg(boolean can_destroyed) {
-        if(!can_destroyed){
-        img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b0.png");
-        } else{
-            img = new ImageIcon(Path_to_blocks+"\\"+"db0.png");
-            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
-        }
-    }
-    public Image getImg(){
-        return img.getImage();
-    }
+//    public void setImg(boolean can_destroyed) {
+//        if(!can_destroyed){
+//        img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b0.png");
+//        } else{
+//            img = new ImageIcon(Path_to_blocks+"\\"+"db0.png");
+//            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
+//        }
+//    }
+//    public Image getImg(){
+//        return img.getImage();
+//    }
     void setLevel(String level){
         this.level = level;
     }
@@ -111,9 +113,13 @@ public class Block extends Model {
          }
      }
     public String type_of_block(){
+        if(live>1){
         return "B";
+        } else{
+            return "DB";
+        }
     }
-    public int getWidth(){return img.getIconWidth();}
-    public int getHeight(){return img.getIconHeight();}
+    public int getWidth(){return Width;}
+    public int getHeight(){return Height;}
 }
 
