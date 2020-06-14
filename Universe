@@ -1,14 +1,239 @@
 package Models;
 
+import Controller.Controller;
+import View.View;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+//import static Controller.Controller.stopGame;
+
 public class Universe {
+    static boolean during_game = false;
     public final static int SPEED_OF_UNIVERSE = 2;
     private static int Universe_coordinate = 0;//Это самая начальная точка 0,0
-
+    static private int free_bullet = 0;
+    static private int free_background = 0;
+    static private int free_blocks = 0;
+    static private int free_blocksDL = 0;
+    static private int free_blocksDR = 0;
+    static private int free_blocksUL = 0;
+    static private int free_blocksUR = 0;
+    static private final ArrayList<Block> blocks = new ArrayList<Block>();
+    static private final ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    static private final ArrayList<My_background> backgrounds = new ArrayList<My_background>();
+    static private final ArrayList<Model> models = new ArrayList<Model>();
     public Universe(){}
-    public void MoveUniverse(){
+    public static void MoveUniverse(){
         Universe_coordinate-=SPEED_OF_UNIVERSE;
+        for(Block block:blocks){
+            if(block.isVisible()){
+                block.move(-Universe.SPEED_OF_UNIVERSE,0);
+            }
+        }
+        for(Bullet bullet: bullets){
+            if(bullet.isVisible()){
+                bullet.move();}
+        }
+        for(My_background background:backgrounds){
+            if(background.isVisible()){
+                background.moveBackground(-Universe.SPEED_OF_UNIVERSE);}
+            if(background.getX()<=-1000){
+                background.setVisible(false);
+                free_background++;
+                createNextBackground();
+            }
+        }
+    }
+    public static void toModel(){
+        for(Model model:blocks){
+            if(!models.contains(model)){
+            models.add(model);}
+        }
+        for(Model model:backgrounds){
+            if(!models.contains(model)){
+                models.add(model);}
+        }
+        for(Model model:bullets){
+            if(!models.contains(model)){
+                models.add(model);}
+        }
+    }
+    public static ArrayList<Model> getModels(){
+        toModel();
+
+        return models;
+    }
+    public static ArrayList<Block> getBlocks(){
+        return blocks;
+    }
+    static public void GenerateUniverse(){
+        during_game = true;
+        LevelsGenerator.setLevel();
+        addBlock();
+        backgrounds.add(new My_background(0));
+        backgrounds.add(new My_background(1000));
+        toModel();
+        models.add(Controller.getPlayer());
+        timer.start();
+    }
+    static void addBlock(){
+        for(;LevelsGenerator.getNextX()+Universe_coordinate<=1200;){
+            if(LevelsGenerator.ParseNextLine()){
+                endGame();
+                break;
+            } else{
+                if(LevelsGenerator.getNext_type_of_block()=="B"&&free_blocks!=0){
+                    LevelsGenerator.CreateBlock(SpaceBlock("B"));
+                    return;
+                }
+                if(LevelsGenerator.getNext_type_of_block()=="DL"&&free_blocksDL!=0){
+                    LevelsGenerator.CreateBlock(SpaceBlock("DL"));
+                    return;
+                }
+                if(LevelsGenerator.getNext_type_of_block()=="DR"&&free_blocksDR!=0){
+                    LevelsGenerator.CreateBlock(SpaceBlock("DR"));
+                    return;
+                }
+                if(LevelsGenerator.getNext_type_of_block()=="UL"&&free_blocksUL!=0){
+                    LevelsGenerator.CreateBlock(SpaceBlock("UL"));
+                    return;
+                }
+                if(LevelsGenerator.getNext_type_of_block()=="UR"&&free_blocksUR!=0){
+                    LevelsGenerator.CreateBlock(SpaceBlock("UR"));
+                    return;
+                }
+                blocks.add(LevelsGenerator.CreateBlock());
+                toModel();
+            }
+        }
+    }
+    public static Bullet SpaceBullet(){
+        for(Bullet bullet:bullets){
+            if(!bullet.isVisible()){
+                free_bullet--;
+                return bullet;
+            }
+        }
+        return null;
+    }
+    static My_background SpaceBackground(){
+        for(My_background background:backgrounds){
+            if(!background.isVisible()){
+                free_background--;
+                return background;
+            }
+        }
+        return null;
+    }
+    static Block SpaceBlock(String type_of_block){//В блоки
+        for(Block block:blocks){
+            if(block.isVisible()&&block.type_of_block().equals(type_of_block)){
+                switch (block.type_of_block()){
+                    case (""):free_blocks--; break;
+                    case ("DL"):free_blocksDL--; break;
+                    case ("DR"):free_blocksDR--; break;
+                    case ("UL"):free_blocksUL--; break;
+                    case ("UR"):free_blocksUR--;break;
+                }
+                return block;
+            }
+        }
+        return null;
+    }
+    public static void CollidePlayer( Plane player) {
+        for(Block block:blocks){
+            if(block.inHitBox(player)&&block.isVisible()&&player.isVisible()) {
+                if (player.getDamage()) {
+                    player.setVisible(false);
+                    endGame();
+                    break;
+                }
+                if (block.getDamage()) {
+                    switch (block.type_of_block()){
+                        case("B"): free_blocks++;break;
+                        case("UL"): free_blocksUL++;break;
+                        case("UR"): free_blocksUR++;break;
+                        case("DL"): free_blocksDL++;break;
+                        case("DR"): free_blocksDR++;break;
+                    }
+                    block.setVisible(false);
+                }
+            }
+        }
+    }
+    static void CollideBullet(){
+        for(Bullet bullet:bullets){
+            for(Block block:blocks){
+                if(bullet.isVisible()&&block.isVisible()&&block.inHitBox(bullet)){
+                    if(bullet.getDamage()){
+                        free_bullet++;
+                        bullet.setVisible(false);
+                    }
+                    if (block.getDamage()) {
+                        switch (block.type_of_block()){
+                            case("B"): free_blocks++;break;
+                            case("UL"): free_blocksUL++;break;
+                            case("UR"): free_blocksUR++;break;
+                            case("DL"): free_blocksDL++;break;
+                            case("DR"): free_blocksDR++;break;
+                        }
+                        block.setVisible(false);
+                    }
+                }
+            }
+        }
     }
     public int getUniverse_coordinate(){
         return Universe_coordinate;
+    }
+    static void createNextBackground() {
+        if(free_background!=0){
+            SpaceBackground().CreateBackground(1000);
+        } else{
+            backgrounds.add(new My_background(1000));
+            toModel();
+        }
+    }
+    public static ArrayList<Bullet> getBullets(){
+        return bullets;
+    }
+    public static int getHave_free_bullet(){
+        return free_bullet;
+    }
+    static public void per_tic(){
+        if(during_game){
+            MoveUniverse();
+
+            if((LevelsGenerator.nextX+Universe_coordinate)<=1000){
+                addBlock();
+            }
+            CollideBullet();
+            CollidePlayer(Controller.getPlayer());}
+    }
+   static Timer timer = new Timer(150, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            per_tic();
+        }
+    });
+    static public void endGame(){
+        during_game = false;
+        timer.stop();
+        View.endGame();
+        for(Block block: blocks){
+            block.NotifyAll();
+        }
+        for(Bullet bullet: bullets){
+            bullet.NotifyAll();
+        }
+        for(My_background background: backgrounds){
+            background.NotifyAll();
+        }
+        for(Block block: blocks){
+            block.NotifyAll();
+        }
     }
 }
