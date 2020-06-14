@@ -3,62 +3,44 @@ package Models;
 import javax.swing.*;
 import java.awt.*;
 
-public class Bullet extends JComponent{
-    public static final ImageIcon bullet =new ImageIcon ("Bullet\\Пуля.png");
+
+public class Bullet extends Model{
+    ImageIcon img = new ImageIcon("Bullet\\Пуля.png");
     public static final int SPEED_OF_BULLET = 25;
     private int live = 1;
-    private int X_coordinate;
-    private int Y_coordinate;
     private boolean Visible;
 
     public Bullet(Plane player){
         CreateBullet(player);
     }
     public void CreateBullet(Plane player){
-        X_coordinate = player.getX_coordinate()+player.getWidth()-10;
-        Y_coordinate = player.getY_coordinate()+player.getHeight()-6;
+        this.X = player.getX()+player.getWidth()-10;
+        this.Y = player.getY()+player.getHeight()-6;
         live = 1;
         setVisible(true);
+        getSignal();
     }
     public boolean getDamage(){
         live--;
         setVisible(false);
+        getSignal();
         return true;
     }
-    public void MoveBullet(){
-        X_coordinate+=SPEED_OF_BULLET;
+    public void move(){
+        this.X+=SPEED_OF_BULLET;
+        getSignal();
     }
-
-
-    public Image getImg() {
-        return bullet.getImage();
-    }
-
-    @Override
     public boolean isVisible() {
         return Visible;
     }
 
-    @Override
     public void setVisible(boolean Visible) {
         this.Visible = Visible;
     }
 
-    public int getX_coordinate() {
-        return X_coordinate;
+    @Override
+    public Image getImg() {
+        return img.getImage();
     }
-
-    public int getY_coordinate() {
-        return Y_coordinate;
-    }
-
-//    @Override
-//    public int getWidth() {
-//        return bullet.getIconWidth();
-//    }
-//
-//    @Override
-//    public int getHeight() {
-//        return bullet.getIconHeight();
-//    }
 }
+
