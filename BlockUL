@@ -7,25 +7,29 @@ public class BlockUL extends Block {
         super(X, Y, can_destroyed);
     }
 
-    public void setImg(boolean can_destroyed) {
-        if(!can_destroyed){
-            Block = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b3.png");
-        } else{
-            Block = new ImageIcon(Path_to_blocks+"\\"+"db3.png");
-            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
-        }
-    }
+//    public void setImg(boolean can_destroyed) {
+//        if(!can_destroyed){
+//            img = new ImageIcon(Path_to_blocks+"\\"+level+"\\"+"b3.png");
+//        } else{
+//            img = new ImageIcon(Path_to_blocks+"\\"+"db3.png");
+//            //System.out.println(Path_to_blocks+"0.png" +"    "+ Block.getIconHeight());
+//        }
+//    }
 
     int function_of_blockD(int X){//определяет нижнюю границу блока
 
-        if((X<=(X_coordinate+getWidth()))&&(X>=X_coordinate)){
-            return Y_coordinate+getHeight()-(X-X_coordinate);
+        if((X<=(this.X+getWidth()))&&(X>=this.X)){
+            return this.Y+getHeight()-(X-this.X);
         } else{
             return -10000;
         }
     }
 
     public String type_of_block(){
-        return "UL";
+        if(live>1){
+            return "UL";
+        } else{
+            return "DUL";
+        }
     }
 }
