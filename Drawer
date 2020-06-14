@@ -1,9 +1,7 @@
-package com.company;
+package View;
 
-import Models.Block;
-import Models.Bullet;
-import Models.My_background;
-import Models.Plane;
+import Models.*;
+import Controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,107 +11,59 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Drawer {
+public class Drawer extends View {
+
 //    private static Object MoveDL;
 
     //    static JFrame getPreGame(){//Здесь должно быть меню
 //
 //    }
-    static class MoveDL extends AbstractAction{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Controller.movePlane("as", Games_panel.getPlayer());
-            System.out.println("as");
-        }
+    public Drawer(String s){
+        super(s);
     }
-    static class MoveDR extends AbstractAction{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Controller.movePlane("ds", Games_panel.getPlayer());
-            System.out.println("ds");
-        }
-    }
-    static class MoveUL extends AbstractAction{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Controller.movePlane("aw", Games_panel.getPlayer());
-            System.out.println("aw");
-        }
-    }
-    static class MoveUR extends AbstractAction{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Controller.movePlane("dw", Games_panel.getPlayer());
-            System.out.println("dw");
-        }
-    }
-    static JFrame getPicture(){
-        JFrame game = new JFrame("game");
+    public static JFrame getPicture(){
+        Drawer game = new Drawer("game");
         game.setBounds(200,200,1000,480);
         game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Games_panel panel = new Games_panel();
-
-        game.repaint();
         game.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 if(e.getKeyCode() == KeyEvent.VK_A){
-                Controller.movePlane("a",panel.getPlayer());
+                Controller.movePlane("a");
                // System.out.println("A");
                      }
                 if(e.getKeyCode() == KeyEvent.VK_S){
-                    Controller.movePlane("s",panel.getPlayer());
+                    Controller.movePlane("s");
                //     System.out.println("A");
                         }
                 if(e.getKeyCode() == KeyEvent.VK_D){
-                    Controller.movePlane("d", panel.getPlayer());
+                    Controller.movePlane("d");
                    // System.out.println("A");
                 }
                 if(e.getKeyCode() == KeyEvent.VK_W){
-                    Controller.movePlane("w", panel.getPlayer());
+                    Controller.movePlane("w");
                     //System.out.println("A");
                 }
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){
-                    Controller.Shoot(panel.getPlayer(),panel.getBullets());
+                    Controller.Shoot();
                     //System.out.println("A");
                 }
-                game.repaint();
                // System.out.println("pressed"+e.getKeyCode());
             }
         });
-        KeyStroke strokeUL = KeyStroke.getKeyStroke("a w");
-        KeyStroke strokeUR = KeyStroke.getKeyStroke("d w");
-        KeyStroke strokeDL = KeyStroke.getKeyStroke("a s");
-        KeyStroke strokeDR = KeyStroke.getKeyStroke("a d");
-        InputMap inputMap = panel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        inputMap.put(strokeDL,"DL");
-        inputMap.put(strokeDR,"DR");
-        inputMap.put(strokeUL,"UL");
-        inputMap.put(strokeUR,"UR");
-        ActionMap actionMap = panel.getActionMap();
-        actionMap.put("DL",new MoveDL());
-        actionMap.put("DR",new MoveDR());
-        actionMap.put("UL",new MoveUL());
-        actionMap.put("UR",new MoveUR());
         Timer timer = new Timer(150, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Controller.per_tic(Games_panel.getBlocks(),Games_panel.getBullets(),Games_panel.getBackgrounds(),Games_panel.getPlayer());
-                //System.out.println("tic"+ panel.getX()+"  "+panel.getY()+"   "+panel.getHeight()+"   "+panel.getWidth()+"  "+Controller.getPlayer().getX_coordinate());
-                game.repaint();
-
+                if(GO< Universe.getModels().size()){
+                    for(Model model:Universe.getModels()){
+                        model.subscribe(game);
+                    }
+                }
             }
         });
-
         timer.start();
-        if(!Controller.during_game){
-            timer.stop();
-        }
         game.add(panel);
         panel.setVisible(true);
         game.setVisible(true);
@@ -125,42 +75,4 @@ public class Drawer {
 
 }
 
-class Games_panel extends JPanel{
-    static private final ArrayList<Block> blocks = new ArrayList<Block>();
-    static private final Plane player = new Plane();
-    static private final ArrayList<My_background> backgrounds = new ArrayList<My_background>();
-    static private final ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-    @Override
-    public void paint(Graphics g) {
-        for(My_background background:backgrounds){
-            g.drawImage(background.getImg(),background.getX(),background.getY(),null);
-        }
-        for(Block block:blocks){
-            if(block.isVisible()){
-            g.drawImage(block.getImg(),block.getX_coordinate(),block.getY_coordinate(),null);}
-        }
-        for(Bullet bullet:bullets){
-            if(bullet.isVisible()){
-            g.drawImage(bullet.getImg(),bullet.getX_coordinate(),bullet.getY_coordinate(),null);}
-        }
-        if(player.isVisible()){
-        g.drawImage(player.getImg(),player.getX_coordinate(),player.getY_coordinate(),null);}
-    }
-
-    static public ArrayList<Block> getBlocks() {
-        return blocks;
-    }
-
-    static public ArrayList<Bullet> getBullets() {
-        return bullets;
-    }
-
-    static public Plane getPlayer() {
-        return player;
-    }
-
-    static public ArrayList<My_background> getBackgrounds() {
-        return backgrounds;
-    }
-}
 
